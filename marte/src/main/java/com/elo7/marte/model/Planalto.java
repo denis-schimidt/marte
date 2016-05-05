@@ -9,9 +9,7 @@ public class Planalto {
 		this.y = y;
 	}
 	
-	public boolean isMudancaEixoValido(MudancaEixo mudancaEixo, Coordenada coordenada){
-		coordenada.mudarCoordenada(mudancaEixo);
-		
+	public boolean isCoordenadaDentroPlanalto(Coordenada coordenada){
 		return coordenada.getX() >= 0 && coordenada.getX() <= getX() &&
 				coordenada.getY() >= 0 &&  coordenada.getY() <= getY();
 	}

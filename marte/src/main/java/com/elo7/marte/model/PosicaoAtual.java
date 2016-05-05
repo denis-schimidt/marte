@@ -14,8 +14,11 @@ public class PosicaoAtual {
 	public void atualizarPosicao(Comando comando){
 		
 		if(comando==Comando.M){
-			if(planalto.isMudancaEixoValido(direcao.getMudancaEixo(), coordenada.clonar())){
-				coordenada.mudarCoordenada(direcao.getMudancaEixo());				
+			Coordenada possivelNovaCoordenada = coordenada.clonar();
+			possivelNovaCoordenada.mudarCoordenada(direcao.getMudancaEixo());
+			
+			if(planalto.isCoordenadaDentroPlanalto(possivelNovaCoordenada)){
+				coordenada = possivelNovaCoordenada;				
 			}else{
 				// Lanca excecao
 			}
