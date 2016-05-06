@@ -15,7 +15,7 @@ public class PosicaoAtual {
 		
 		if(comando==Comando.M){
 			Coordenada possivelNovaCoordenada = coordenada.clonar();
-			possivelNovaCoordenada.mudarCoordenada(direcao.getMudancaEixo());
+			possivelNovaCoordenada.mudarCoordenada(direcao.getFrente());
 			
 			if(planalto.isCoordenadaDentroPlanalto(possivelNovaCoordenada)){
 				coordenada = possivelNovaCoordenada;				

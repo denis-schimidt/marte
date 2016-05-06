@@ -9,7 +9,7 @@ public class Coordenada implements Clonavel<Coordenada>{
 		this.y = y;
 	}
 	
-	public void mudarCoordenada(MudancaEixo mudancaEixo){
+	public void mudarCoordenada(MoveEixo mudancaEixo){
 		
 		if(mudancaEixo!= null){
 			if(mudancaEixo.getEixo() == Eixo.X){
