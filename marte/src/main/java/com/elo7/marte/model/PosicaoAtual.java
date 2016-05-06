@@ -14,20 +14,25 @@ public class PosicaoAtual {
 	public void atualizarPosicao(Comando comando){
 		
 		if(comando==Comando.M){
-			Coordenada possivelNovaCoordenada = coordenada.clonar();
-			possivelNovaCoordenada.mudarCoordenada(direcao.getFrente());
-			
-			if(planalto.isCoordenadaDentroPlanalto(possivelNovaCoordenada)){
-				coordenada = possivelNovaCoordenada;				
-			}else{
-				// Lanca excecao
-			}
+			moverParaFrente();
 		
 		}else if(comando==Comando.L){
 			direcao = direcao.getEsquerda();
 		
 		}else{
 			direcao = direcao.getDireita();
+		}
+	}
+
+	private void moverParaFrente() {
+		Coordenada possivelNovaCoordenada = coordenada.clonar();
+		possivelNovaCoordenada.mudarCoordenada(direcao.getFrente());
+		
+		if(planalto.isCoordenadaDentroPlanalto(possivelNovaCoordenada)){
+			coordenada = possivelNovaCoordenada;				
+			
+		}else{
+			// Lanca excecao
 		}
 	}
 
