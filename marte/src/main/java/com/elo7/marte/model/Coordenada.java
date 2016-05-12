@@ -1,24 +1,28 @@
 package com.elo7.marte.model;
 
-public class Coordenada implements Clonavel<Coordenada>{
-	private int x;
-	private int y;
+public final class Coordenada{
+	private final int x;
+	private final int y;
 	
 	public Coordenada(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void mudarCoordenada(MoveEixo mudancaEixo){
+	public Coordenada mudarCoordenada(Movimento movimento){
+		int xAtual = x;
+		int yAtual = y;
 		
-		if(mudancaEixo!= null){
-			if(mudancaEixo.getEixo() == Eixo.X){
-				x+= mudancaEixo.getValor();
+		if(movimento!= null){
+			if(movimento.getEixo() == Eixo.X){
+				xAtual+= movimento.getValor();
 				
-			}else if(mudancaEixo.getEixo() == Eixo.Y){
-				y+= mudancaEixo.getValor();
+			}else if(movimento.getEixo() == Eixo.Y){
+				yAtual+= movimento.getValor();
 			}
 		}
+		
+		return new Coordenada(xAtual, yAtual);
 	}
 
 	public int getX() {
@@ -55,7 +59,7 @@ public class Coordenada implements Clonavel<Coordenada>{
 	}
 
 	@Override
-	public Coordenada clonar() {
-		return new Coordenada(x, y);
+	public String toString() {
+		return String.format("Coordenada [x=%s, y=%s]", x, y);
 	}
 }

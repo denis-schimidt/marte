@@ -1,15 +1,10 @@
 package com.elo7.marte.model;
 
 public enum Direcao {
-	N(MoveEixo.X_POSITIVO), E(MoveEixo.Y_POSITIVO), S(MoveEixo.Y_NEGATIVO), W(MoveEixo.X_NEGATIVO); 
+	N, E, S, W; 
 	
 	private Direcao direita;
 	private Direcao esquerda;
-	private MoveEixo frente;
-	
-	private Direcao(MoveEixo frente) {
-		this.frente = frente;
-	}
 
 	static{
 		N.setDireita(E);
@@ -39,9 +34,5 @@ public enum Direcao {
 	
 	public Direcao getEsquerda() {
 		return esquerda;
-	}
-	
-	public MoveEixo getFrente() {
-		return frente;
 	}
 }

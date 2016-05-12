@@ -1,8 +1,8 @@
 package com.elo7.marte.model;
 
-public class Planalto {
-	private int x;
-	private int y;
+public final class Planalto {
+	private final int x;
+	private final int y;
 	
 	public Planalto(int x, int y) {
 		this.x = x;
@@ -20,5 +20,10 @@ public class Planalto {
 
 	public int getY() {
 		return y;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Planalto [x=%s, y=%s]", x, y);
 	}
 }
