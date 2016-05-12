@@ -25,8 +25,8 @@ public class PosicaoAtual {
 	}
 
 	private Coordenada moverParaFrente() {
-		Movimento movimento = Movimento.irParaFrente(direcao);
-		Coordenada novaCoordenada = coordenada.mudarCoordenada(movimento);
+		MudancaCoordenada mudancaCoordenada = MudancaCoordenada.irParaFrente(direcao);
+		Coordenada novaCoordenada = coordenada.mudarCoordenada(mudancaCoordenada);
 
 		if (!planalto.isCoordenadaDentroPlanalto(novaCoordenada)) {
 			String mensagemErro = String.format("A %s ultrapassou os limites do %s", novaCoordenada, planalto);

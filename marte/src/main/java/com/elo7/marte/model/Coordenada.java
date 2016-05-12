@@ -9,7 +9,7 @@ public final class Coordenada{
 		this.y = y;
 	}
 	
-	public Coordenada mudarCoordenada(Movimento movimento){
+	public Coordenada mudarCoordenada(MudancaCoordenada movimento){
 		int xAtual = x;
 		int yAtual = y;
 		
