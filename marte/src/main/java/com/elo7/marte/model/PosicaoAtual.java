@@ -1,43 +1,43 @@
 package com.elo7.marte.model;
 
 public class PosicaoAtual {
+	private final Planalto planalto;
 	private Coordenada coordenada;
 	private Direcao direcao;
-	private Planalto planalto;
-	
+
 	public PosicaoAtual(Coordenada coordenada, Direcao direcao, Planalto planalto) {
 		this.coordenada = coordenada;
 		this.direcao = direcao;
 		this.planalto = planalto;
 	}
-	
-	public void atualizarPosicao(Comando comando){
-		
-		if(comando==Comando.M){
-			moverParaFrente();
-		
-		}else if(comando==Comando.L){
+
+	public void atualizarPosicao(Comando comando) {
+
+		if (comando == Comando.M) {
+			coordenada = moverParaFrente();
+
+		} else if (comando == Comando.L) {
 			direcao = direcao.getEsquerda();
-		
-		}else{
+
+		} else {
 			direcao = direcao.getDireita();
 		}
 	}
 
-	private void moverParaFrente() {
-		Coordenada possivelNovaCoordenada = coordenada.clonar();
-		possivelNovaCoordenada.mudarCoordenada(direcao.getFrente());
-		
-		if(planalto.isCoordenadaDentroPlanalto(possivelNovaCoordenada)){
-			coordenada = possivelNovaCoordenada;				
-			
-		}else{
-			// Lanca excecao
+	private Coordenada moverParaFrente() {
+		Movimento movimento = Movimento.irParaFrente(direcao);
+		Coordenada novaCoordenada = coordenada.mudarCoordenada(movimento);
+
+		if (!planalto.isCoordenadaDentroPlanalto(novaCoordenada)) {
+			String mensagemErro = String.format("A %s ultrapassou os limites do %s", novaCoordenada, planalto);
+			throw new IllegalArgumentException(mensagemErro);
 		}
+
+		return novaCoordenada;
 	}
 
 	public Coordenada getCoordenada() {
-		return coordenada.clonar();
+		return coordenada;
 	}
 
 	public Direcao getDirecao() {

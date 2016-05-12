@@ -4,9 +4,13 @@ import java.util.List;
 
 public class Sonda {
 	private PosicaoAtual posicaoAtual;
-	
-	public void iniciarExploracao(List<Comando> comandos){
-		
+
+	public Sonda(PosicaoAtual posicaoAtual) {
+		this.posicaoAtual = posicaoAtual;
+	}
+
+	public void iniciarExploracao(List<Comando> comandos) {
+
 		for (Comando comando : comandos) {
 			posicaoAtual.atualizarPosicao(comando);
 		}
