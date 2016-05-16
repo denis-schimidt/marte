@@ -1,5 +1,5 @@
 package com.elo7.marte.model;
 
-public enum Eixo {
+enum Eixo {
 	X, Y;
 }

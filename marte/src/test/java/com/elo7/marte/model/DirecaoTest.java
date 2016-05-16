@@ -34,4 +34,32 @@ public class DirecaoTest {
 
 		assertThat(direcao.getEsquerda(), equalTo(Direcao.E));
 	}
+	
+	@Test
+	public void deveVirarDirecaoLesteParaDireita(){
+		Direcao direcao = Direcao.E;
+
+		assertThat(direcao.getDireita(), equalTo(Direcao.S));
+	}
+
+	@Test
+	public void deveVirarDirecaoLesteParaEsquerda(){
+		Direcao direcao = Direcao.E;
+
+		assertThat(direcao.getEsquerda(), equalTo(Direcao.N));
+	}
+	
+	@Test
+	public void deveVirarDirecaoOesteParaDireita(){
+		Direcao direcao = Direcao.W;
+
+		assertThat(direcao.getDireita(), equalTo(Direcao.N));
+	}
+
+	@Test
+	public void deveVirarDirecaoOesteParaEsquerda(){
+		Direcao direcao = Direcao.W;
+
+		assertThat(direcao.getEsquerda(), equalTo(Direcao.S));
+	}
 }

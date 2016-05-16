@@ -1,6 +1,6 @@
 package com.elo7.marte.model;
 
-public enum MudancaCoordenada {
+enum MudancaCoordenada {
 	X_POSITIVO(1,Eixo.X, Direcao.E), X_NEGATIVO(-1, Eixo.X, Direcao.W), Y_POSITIVO(1, Eixo.Y, Direcao.N), Y_NEGATIVO(-1, Eixo.Y, Direcao.S);
 	
 	private int valor;
@@ -21,7 +21,7 @@ public enum MudancaCoordenada {
 			}
 		}  
 		
-		throw new IllegalArgumentException( String.format("Direção %s não possui movimento associado.", direcaoAtual));
+		throw new IllegalArgumentException( String.format("Direção %s não possui um movimento associado.", direcaoAtual));
 	}
 
 	public int getValor() {
