@@ -1,5 +1,6 @@
 package com.elo7.marte.model;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -10,8 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.elo7.marte.model.exception.ComandoInvalidoException;
 import com.elo7.marte.model.exception.CoordenadaInvalidaException;
@@ -19,14 +22,14 @@ import com.google.common.base.Preconditions;
 
 @Table(name="posicao")
 @Entity
-public class Posicao implements Clonavel<Posicao>{
+public class PosicaoAtual implements Clonavel<PosicaoAtual>{
 
 	@Id
 	@GeneratedValue
 	@Column(name="id_posicao", updatable=false)
 	private Long id;
 	
-	@ManyToOne(cascade=CascadeType.PERSIST, optional=false)
+	@OneToOne(cascade=CascadeType.PERSIST, optional=false)
 	@JoinColumn(updatable=false,nullable=false, name="id_sonda")
 	private Sonda sonda;
 	
@@ -35,17 +38,22 @@ public class Posicao implements Clonavel<Posicao>{
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false, updatable=false, length=1)
 	private Direcao direcao;
-
-	Posicao() {}
 	
-	private Posicao(Builder builder){
-		Preconditions.checkArgument(builder.coordenada!=null, "A coordenada da posição não pode ser nula.");
-		Preconditions.checkArgument(builder.direcao!=null, "A direção da posição não pode ser nula.");
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_hora", updatable=false,nullable=false)
+	private Calendar dataHora;
+
+	PosicaoAtual() {}
+	
+	private PosicaoAtual(Builder builder){
+		Preconditions.checkArgument(builder.coordenada!=null, "A coordenada não pode ser nula para a posição atual.");
+		Preconditions.checkArgument(builder.direcao!=null, "A direcao não pode ser nula para a posição atual.");
 		
 		this.coordenada = builder.coordenada;
 		this.direcao = builder.direcao;
 		this.id = builder.id;
 		this.sonda = builder.sonda;
+		this.dataHora = builder.dataHora;
 	}
 	
 	public void atualizarPosicao(Comando comando, Planalto planalto) throws CoordenadaInvalidaException, ComandoInvalidoException {
@@ -65,7 +73,7 @@ public class Posicao implements Clonavel<Posicao>{
 	}
 
 	private Coordenada moverParaFrente(Planalto planalto) throws CoordenadaInvalidaException {
-		Preconditions.checkArgument(planalto!=null, "O planalto não pode ser nulo.");
+		Preconditions.checkArgument(planalto!=null, "O planalto não pode ser nulo para a posição.");
 		
 		Coordenada novaCoordenada = coordenada.mudarCoordenada(MudancaCoordenada.irParaFrente(direcao));
 		
@@ -94,12 +102,17 @@ public class Posicao implements Clonavel<Posicao>{
 		return id;
 	}
 	
+	public Calendar getDataHora() {
+		return (Calendar) dataHora.clone();
+	}
+	
 	@Override
-	public Posicao clonar() {
+	public PosicaoAtual clonar() {
 		return builder().comId(id)
 				.daSonda(sonda)
 				.naCoordenada(coordenada)
 				.naDirecao(direcao)
+				.naDataEHora(dataHora)
 				.build();
 	}
 
@@ -116,7 +129,7 @@ public class Posicao implements Clonavel<Posicao>{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Posicao other = (Posicao) obj;
+		PosicaoAtual other = (PosicaoAtual) obj;
 		
 		return Objects.equals(coordenada, other.coordenada) &&
 				Objects.equals(direcao, other.direcao);
@@ -124,7 +137,7 @@ public class Posicao implements Clonavel<Posicao>{
 
 	@Override
 	public String toString() {
-		return String.format("Posicao [id=%s, coordenada=%s, direcao=%s]", id, coordenada, direcao);
+		return String.format("Posicao [id=%s, coordenada=%s, direcao=%s, dataHora=%4$td/%4$tm/%4$tY às %4$tH:%4$tM:%4$tS]", id, coordenada, direcao, dataHora);
 	}
 
 	public static Builder builder(){
@@ -136,6 +149,7 @@ public class Posicao implements Clonavel<Posicao>{
 		private Sonda sonda;
 		private Coordenada coordenada;
 		private Direcao direcao;
+		private Calendar dataHora;
 		
 		public Builder comId(Long id) {
 			this.id = id;
@@ -155,15 +169,25 @@ public class Posicao implements Clonavel<Posicao>{
 			return this;
 		}
 		
-		
 		public Builder naDirecao(Direcao direcao) {
 			this.direcao = direcao;
 			
 			return this;
 		}
 		
-		public Posicao build(){
-			return new Posicao(this);
+		public Builder naDataEHora(Calendar dataHora) {
+			this.dataHora = dataHora;
+			
+			return this;
+		}
+		
+		public PosicaoAtual build(){
+			
+			if(this.dataHora==null){
+				naDataEHora(Calendar.getInstance());
+			}
+			
+			return new PosicaoAtual(this);
 		}
 	}
 }

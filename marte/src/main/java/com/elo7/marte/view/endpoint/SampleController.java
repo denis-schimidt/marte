@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.elo7.marte.web;
+package com.elo7.marte.view.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.elo7.marte.service.HelloWorldService;
+import com.elo7.marte.application.HelloWorldService;
 
 @Controller
 public class SampleController {

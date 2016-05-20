@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.elo7.marte.application;
+package com.elo7.marte;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

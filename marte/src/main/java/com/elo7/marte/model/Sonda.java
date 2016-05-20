@@ -1,14 +1,18 @@
 package com.elo7.marte.model;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.elo7.marte.model.exception.ComandoInvalidoException;
@@ -25,48 +29,52 @@ public class Sonda{
 	
 	private Planalto planalto;
 	
-	@OneToMany(cascade=CascadeType.PERSIST, mappedBy="sonda", orphanRemoval=true)
-	private List<Posicao> posicoes;
-
+	@OneToOne(cascade=CascadeType.PERSIST, mappedBy="sonda", orphanRemoval=true)
+	private PosicaoAtual posicaoAtual;
+	
+	@OneToMany(cascade=CascadeType.PERSIST, mappedBy="sonda")
+	private Set<RegistroDeBordo> registrosDeBordo = new HashSet<>();
+	
 	Sonda(){}
 	
-	public Sonda(Posicao posicao, Planalto planalto) {
-		Preconditions.checkArgument(planalto!=null, "O Planalto não pode ser nulo.");
+	public Sonda(PosicaoAtual posicaoInicial, Planalto planalto) {
+		Preconditions.checkArgument(posicaoInicial!=null, "A posição inicial não pode ser nula para a sonda.");
+		Preconditions.checkArgument(planalto!=null, "O planalto não pode ser nulo para a sonda.");
 		
-		this.posicoes = new ArrayList<>();
+		this.posicaoAtual = posicaoInicial;
 		this.planalto = planalto;
-
-		adicionarPosicao(posicao);
+		
+		posicaoInicial.setSonda(this);
+		
+		salvarRegistroDeBordo(posicaoInicial);
 	}
 
 	public void iniciarExploracao(List<Comando> comandos) throws CoordenadaInvalidaException, ComandoInvalidoException {
 		
 		for (Comando comando : comandos) {
-			Posicao possivelNovaPosicao = getPosicaoAtual().clonar();
+			PosicaoAtual possivelNovaPosicao = posicaoAtual.clonar();
 			possivelNovaPosicao.atualizarPosicao(comando, planalto);
 			
-			adicionarPosicao(possivelNovaPosicao);
+			this.posicaoAtual = possivelNovaPosicao;
+			salvarRegistroDeBordo(possivelNovaPosicao);
 		}	
 	}
-	
-	public Posicao getPosicaoAtual() {
-		return posicoes.get(posicoes.size()-1);
-	}
-	
-	private void adicionarPosicao(Posicao posicao){
-		Preconditions.checkArgument(posicao!=null, "A Posição não pode ser nula.");
-		
-		posicoes.add(posicao);
-		posicao.setSonda(this);
+
+	private void salvarRegistroDeBordo(PosicaoAtual possivelNovaPosicao) {
+		this.registrosDeBordo.add(new RegistroDeBordo(this, possivelNovaPosicao));
 	}
 
 	public Long getId() {
 		return id;
 	}
 	
+	public PosicaoAtual getPosicaoAtual() {
+		return posicaoAtual;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(planalto,posicoes);
+		return Objects.hash(planalto,posicaoAtual);
 	}
 
 	@Override
@@ -80,13 +88,26 @@ public class Sonda{
 		
 		Sonda other = (Sonda) obj;
 		return Objects.equals(planalto, other.planalto) &&
-				Objects.equals(posicoes, other.posicoes);
+				Objects.equals(posicaoAtual, other.posicaoAtual);
 	}
 
 	@Override
 	public String toString() {
 		final int maxLen = 10;
-		return String.format("Sonda [id=%s, planalto=%s, posicoes=%s]", id, planalto,
-				posicoes != null ? posicoes.subList(0, Math.min(posicoes.size(), maxLen)) : null);
+		return String.format("Sonda [id=%s, planalto=%s, posicaoAtual=%s, registrosDeBordo=%s]", id, planalto,
+				posicaoAtual, registrosDeBordo != null ? toString(registrosDeBordo, maxLen) : null);
+	}
+
+	private String toString(Collection<?> collection, int maxLen) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		int i = 0;
+		for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
+			if (i > 0)
+				builder.append(", ");
+			builder.append(iterator.next());
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 }

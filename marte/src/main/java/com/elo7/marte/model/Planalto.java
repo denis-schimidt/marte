@@ -27,7 +27,7 @@ public final class Planalto {
 	}
 	
 	public boolean isCoordenadaDentroPlanalto(Coordenada coordenada){
-		Preconditions.checkArgument(coordenada != null, "A coordenada não pode ser nula.");
+		Preconditions.checkArgument(coordenada!=null, "A coordenada não pode ser nula para o planalto.");
 		
 		return coordenada.getEixoX() >= 0 && coordenada.getEixoX() <= getPontoMaximoX() &&
 				coordenada.getEixoY() >= 0 &&  coordenada.getEixoY() <= getPontoMaximoY();
