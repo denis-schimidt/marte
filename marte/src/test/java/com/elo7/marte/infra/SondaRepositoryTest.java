@@ -25,7 +25,7 @@ public class SondaRepositoryTest {
 	
 	private static EntityManager em = Persistence.createEntityManagerFactory("JPA_PU").createEntityManager();
 
-	private SondaRepository repository = new SondaRepositoryImpl(em);
+	private SondaRepository repository;
 	
 	@Test
 	public void gravarSonda() throws CoordenadaInvalidaException, ComandoInvalidoException{
@@ -37,7 +37,7 @@ public class SondaRepositoryTest {
 		Sonda sonda = new Sonda(PosicaoAtual.builder().naCoordenada(inicio).naDirecao(direcao).build(), planalto);
 		sonda.iniciarExploracao(comandos);
 		
-		repository.salvar(sonda);
+		repository.save(sonda);
 		
 		System.out.println(sonda.getPosicaoAtual());
 	}

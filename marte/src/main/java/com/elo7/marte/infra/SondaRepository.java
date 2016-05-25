@@ -1,12 +1,9 @@
 package com.elo7.marte.infra;
 
-import com.elo7.marte.model.RegistroDeBordo;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
 import com.elo7.marte.model.Sonda;
 
-public interface SondaRepository {
-
-	void salvar(Sonda sonda);
-
-	void salvar(RegistroDeBordo historicoPosicao);
+public interface SondaRepository extends PagingAndSortingRepository<Sonda, Long>{
 
 }

@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 import com.google.common.base.Preconditions;
 
 @Embeddable
-public final class Coordenada{
+public class Coordenada{
 	
 	@Column(nullable=false,updatable=false,name="eixo_x")
 	private int eixoX;

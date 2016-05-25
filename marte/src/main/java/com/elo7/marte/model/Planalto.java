@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 import com.google.common.base.Preconditions;
 
 @Embeddable
-public final class Planalto {
+public class Planalto {
 	
 	@Column(nullable=false,name="ponto_maximo_x")
 	private int pontoMaximoX;

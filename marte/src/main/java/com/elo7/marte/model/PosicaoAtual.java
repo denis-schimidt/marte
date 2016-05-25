@@ -22,7 +22,7 @@ import com.google.common.base.Preconditions;
 
 @Table(name="posicao")
 @Entity
-public class PosicaoAtual implements Clonavel<PosicaoAtual>{
+public class PosicaoAtual implements PosicaoIdentificavel, Clonavel<PosicaoAtual>{
 
 	@Id
 	@GeneratedValue
@@ -46,13 +46,13 @@ public class PosicaoAtual implements Clonavel<PosicaoAtual>{
 	PosicaoAtual() {}
 	
 	private PosicaoAtual(Builder builder){
-		Preconditions.checkArgument(builder.coordenada!=null, "A coordenada não pode ser nula para a posição atual.");
-		Preconditions.checkArgument(builder.direcao!=null, "A direcao não pode ser nula para a posição atual.");
+		Preconditions.checkArgument(builder.coordenada!= null, "A coordenada não pode ser nula.");
+		Preconditions.checkArgument(builder.direcao!= null, "A direção não pode ser nula.");
 		
-		this.coordenada = builder.coordenada;
-		this.direcao = builder.direcao;
 		this.id = builder.id;
 		this.sonda = builder.sonda;
+		this.coordenada = builder.coordenada;
+		this.direcao = builder.direcao;
 		this.dataHora = builder.dataHora;
 	}
 	
@@ -90,10 +90,12 @@ public class PosicaoAtual implements Clonavel<PosicaoAtual>{
 		this.sonda = sonda;
 	}
 
+	@Override
 	public Coordenada getCoordenada() {
 		return coordenada;
 	}
 
+	@Override
 	public Direcao getDirecao() {
 		return direcao;
 	}
@@ -102,6 +104,7 @@ public class PosicaoAtual implements Clonavel<PosicaoAtual>{
 		return id;
 	}
 	
+	@Override
 	public Calendar getDataHora() {
 		return (Calendar) dataHora.clone();
 	}
@@ -177,6 +180,14 @@ public class PosicaoAtual implements Clonavel<PosicaoAtual>{
 		
 		public Builder naDataEHora(Calendar dataHora) {
 			this.dataHora = dataHora;
+			
+			return this;
+		}
+		
+		public Builder naPosicao(PosicaoIdentificavel posicaoIdentificavel) {
+			this.coordenada = posicaoIdentificavel.getCoordenada();
+			this.dataHora = posicaoIdentificavel.getDataHora();
+			this.direcao = posicaoIdentificavel.getDirecao();
 			
 			return this;
 		}

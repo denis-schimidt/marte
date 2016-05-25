@@ -1,4 +1,4 @@
-package com.elo7.marte.infra;
+/*package com.elo7.marte.infra;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -35,3 +35,4 @@ public class SondaRepositoryImpl implements SondaRepository {
 		em.getTransaction().commit();
 	}
 }
+*/

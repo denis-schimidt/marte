@@ -46,7 +46,7 @@ public class Sonda{
 		
 		posicaoInicial.setSonda(this);
 		
-		salvarRegistroDeBordo(posicaoInicial);
+		incluirRegistroDeBordo(posicaoInicial);
 	}
 
 	public void iniciarExploracao(List<Comando> comandos) throws CoordenadaInvalidaException, ComandoInvalidoException {
@@ -56,19 +56,24 @@ public class Sonda{
 			possivelNovaPosicao.atualizarPosicao(comando, planalto);
 			
 			this.posicaoAtual = possivelNovaPosicao;
-			salvarRegistroDeBordo(possivelNovaPosicao);
+			incluirRegistroDeBordo(possivelNovaPosicao);
 		}	
 	}
 
-	private void salvarRegistroDeBordo(PosicaoAtual possivelNovaPosicao) {
-		this.registrosDeBordo.add(new RegistroDeBordo(this, possivelNovaPosicao));
+	private void incluirRegistroDeBordo(PosicaoIdentificavel possivelNovaPosicao) {
+		RegistroDeBordo registroDeBordo = RegistroDeBordo.builder()
+			.naPosicao(possivelNovaPosicao)
+			.daSonda(this)
+			.build();
+		
+		this.registrosDeBordo.add(registroDeBordo);
 	}
 
 	public Long getId() {
 		return id;
 	}
 	
-	public PosicaoAtual getPosicaoAtual() {
+	public PosicaoIdentificavel getPosicaoAtual() {
 		return posicaoAtual;
 	}
 	

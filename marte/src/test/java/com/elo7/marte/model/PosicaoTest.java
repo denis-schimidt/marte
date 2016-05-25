@@ -37,8 +37,8 @@ public class PosicaoTest {
 	
 	@Test
 	public void deveConsiderarDuasSondasIguais(){
-		PosicaoAtual posicao1 = PosicaoAtual.builder().naDirecao(Direcao.E).naCoordenada(new Coordenada(5,5)).build();
-		PosicaoAtual posicao2 = PosicaoAtual.builder().naDirecao(Direcao.E).naCoordenada(new Coordenada(5,5)).build();
+		PosicaoIdentificavel posicao1 = PosicaoAtual.builder().naDirecao(Direcao.E).naCoordenada(new Coordenada(5,5)).build();
+		PosicaoIdentificavel posicao2 = PosicaoAtual.builder().naDirecao(Direcao.E).naCoordenada(new Coordenada(5,5)).build();
 		
 		assertEquals(posicao1, posicao2);
 		assertEquals(posicao1.hashCode(), posicao2.hashCode());
