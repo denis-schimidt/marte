@@ -1,53 +1,64 @@
 package com.elo7.marte.infra;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import java.util.Set;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.elo7.marte.model.Comando;
-import com.elo7.marte.model.Coordenada;
-import com.elo7.marte.model.Direcao;
-import com.elo7.marte.model.Planalto;
-import com.elo7.marte.model.PosicaoAtual;
-import com.elo7.marte.model.Sonda;
-import com.elo7.marte.model.exception.ComandoInvalidoException;
-import com.elo7.marte.model.exception.CoordenadaInvalidaException;
+import com.elo7.marte.MarteApplication;
+import com.elo7.marte.domain.planalto.Planalto;
+import com.elo7.marte.domain.planalto.PossivelColisaoSondasNoPlanaltoException;
+import com.elo7.marte.domain.sonda.Comando;
+import com.elo7.marte.domain.sonda.Coordenada;
+import com.elo7.marte.domain.sonda.CoordenadaForaDoPlanaltoException;
+import com.elo7.marte.domain.sonda.Direcao;
+import com.elo7.marte.domain.sonda.PosicaoDirecional;
+import com.elo7.marte.domain.sonda.Sonda;
+import com.elo7.marte.domain.sonda.SondaRepository;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = MarteApplication.class)
+@Transactional
+@IntegrationTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SondaRepositoryTest {
 	
-	private static EntityManager em = Persistence.createEntityManagerFactory("JPA_PU").createEntityManager();
-
+	@Autowired
 	private SondaRepository repository;
 	
 	@Test
-	public void gravarSonda() throws CoordenadaInvalidaException, ComandoInvalidoException{
+	@Commit
+	public void gravarSonda() throws CoordenadaForaDoPlanaltoException, PossivelColisaoSondasNoPlanaltoException{
 		Planalto planalto = new Planalto(5, 5);
 		Coordenada inicio = new Coordenada(1, 2);
-		Direcao direcao = Direcao.N;
-		List<Comando> comandos = Arrays.asList(Comando.L, Comando.M, Comando.L, Comando.M, Comando.L, Comando.M, Comando.L, Comando.M, Comando.M);
+		Direcao direcao = Direcao.NORTH;
+		List<Comando> comandos = Arrays.asList(Comando.LEFT, Comando.MOVES_FOWARD, Comando.LEFT, Comando.MOVES_FOWARD, Comando.LEFT, Comando.MOVES_FOWARD, Comando.LEFT, Comando.MOVES_FOWARD, Comando.MOVES_FOWARD);
 		
-		Sonda sonda = new Sonda(PosicaoAtual.builder().naCoordenada(inicio).naDirecao(direcao).build(), planalto);
-		sonda.iniciarExploracao(comandos);
+		Sonda sonda = new Sonda(new PosicaoDirecional(inicio, direcao), planalto);
+		
+		Set<PosicaoDirecional> posicoesOutraSonda = new HashSet<>();
+		posicoesOutraSonda.add(new PosicaoDirecional(new Coordenada(1, 8), Direcao.NORTH));
+		
+		sonda.iniciarExploracao(comandos, posicoesOutraSonda);
 		
 		repository.save(sonda);
 		
-		System.out.println(sonda.getPosicaoAtual());
+		System.out.println(sonda);
 	}
 	
 	@Test
-	public void recuperarSonda() throws CoordenadaInvalidaException, ComandoInvalidoException{
-		TypedQuery<Sonda> query = em.createQuery("SELECT s FROM Sonda s", Sonda.class); 
-		
-		List<Sonda> list = query.getResultList();
-		
-		System.out.println(list.get(0));
+	public void recuperarSonda(){
+		repository.findAll().forEach(System.out::println);
 	}
 }
