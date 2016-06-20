@@ -1,13 +1,9 @@
 package com.elo7.marte.domain.sonda;
 
 public enum Comando {
-	LEFT("L", p -> new PosicaoDirecional(p.getCoordenada(), p.getDirecao().getEsquerda())), 
-	RIGHT("R",p -> new PosicaoDirecional(p.getCoordenada(), p.getDirecao().getDireita())), 
-	MOVES_FOWARD("M", p-> {
-		MudancaCoordenada mudancaCoordenada = MudancaCoordenada.irParaFrente(p.getDirecao());
-		Coordenada novaCoordenada = p.getCoordenada().mudarCoordenada(mudancaCoordenada);
-		return new PosicaoDirecional(novaCoordenada, p.getDirecao());
-	});
+	LEFT("L", p -> PosicaoDirecional.builder().naCoordenada(p.getCoordenada()).apontandoPara(p.getDirecao().getEsquerda()).build()), 
+	RIGHT("R",p -> PosicaoDirecional.builder().naCoordenada(p.getCoordenada()).apontandoPara(p.getDirecao().getDireita()).build()),
+	MOVES_FOWARD("M", p-> PosicaoDirecional.builder().naCoordenada(p.getCoordenada().moverAFrente(p.getDirecao())).apontandoPara(p.getDirecao()).build());
 
 	private String codigo;
 	private Acao acao;

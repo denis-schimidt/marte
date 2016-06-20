@@ -49,8 +49,7 @@ public class RegistroDeBordo implements Serializable {
 	@Column(nullable = false, updatable = false, name = "data_hora_gravacao")
 	private LocalDateTime dataHoraGravacao;
 
-	RegistroDeBordo() {
-	}
+	RegistroDeBordo() {}
 
 	public RegistroDeBordo(SondaNoPlanalto sondaNoPlanalto, Comando comandoExecutado,
 			PosicaoDirecional posicaoPosComando, StatusMovimentacaoSonda statusMovimentacaoSonda) {

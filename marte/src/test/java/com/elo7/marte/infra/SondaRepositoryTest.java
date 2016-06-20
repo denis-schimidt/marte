@@ -20,7 +20,6 @@ import com.elo7.marte.MarteApplication;
 import com.elo7.marte.domain.planalto.Planalto;
 import com.elo7.marte.domain.planalto.PossivelColisaoSondasNoPlanaltoException;
 import com.elo7.marte.domain.sonda.Comando;
-import com.elo7.marte.domain.sonda.Coordenada;
 import com.elo7.marte.domain.sonda.CoordenadaForaDoPlanaltoException;
 import com.elo7.marte.domain.sonda.Direcao;
 import com.elo7.marte.domain.sonda.PosicaoDirecional;
@@ -41,14 +40,12 @@ public class SondaRepositoryTest {
 	@Commit
 	public void gravarSonda() throws CoordenadaForaDoPlanaltoException, PossivelColisaoSondasNoPlanaltoException{
 		Planalto planalto = new Planalto(5, 5);
-		Coordenada inicio = new Coordenada(1, 2);
-		Direcao direcao = Direcao.NORTH;
 		List<Comando> comandos = Arrays.asList(Comando.LEFT, Comando.MOVES_FOWARD, Comando.LEFT, Comando.MOVES_FOWARD, Comando.LEFT, Comando.MOVES_FOWARD, Comando.LEFT, Comando.MOVES_FOWARD, Comando.MOVES_FOWARD);
 		
-		Sonda sonda = new Sonda(new PosicaoDirecional(inicio, direcao), planalto);
+		Sonda sonda = new Sonda(PosicaoDirecional.builder().noEixoX(1).noEixoY(2).apontandoPara(Direcao.NORTH).build(), planalto);
 		
 		Set<PosicaoDirecional> posicoesOutraSonda = new HashSet<>();
-		posicoesOutraSonda.add(new PosicaoDirecional(new Coordenada(1, 8), Direcao.NORTH));
+		posicoesOutraSonda.add(PosicaoDirecional.builder().noEixoX(1).noEixoY(8).apontandoPara(Direcao.NORTH).build());
 		
 		sonda.iniciarExploracao(comandos, posicoesOutraSonda);
 		

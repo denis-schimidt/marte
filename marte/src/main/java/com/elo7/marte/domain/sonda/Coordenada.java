@@ -3,56 +3,39 @@ package com.elo7.marte.domain.sonda;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.google.common.base.Preconditions;
 
 @Embeddable
 public class Coordenada implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	@Column(nullable=false,updatable=false,name="eixo_x")
-	private int eixoX;
+	private EixoX eixoX;
 	
-	@Column(nullable=false,updatable=false,name="eixo_y")
-	private int eixoY;
+	private EixoY eixoY;
 	
 	Coordenada() {}
 	
-	public Coordenada(int eixoX, int eixoY) {
-		Preconditions.checkArgument(eixoX>=0, "O eixo x deve ser maior ou igual que zero.");
-		Preconditions.checkArgument(eixoY>=0, "O eixo y deve ser maior ou igual que zero.");
+	public Coordenada(EixoX eixoX, EixoY eixoY) {
+		Validate.noNullElements(new Object[]{eixoX, eixoY});
 		
 		this.eixoX = eixoX;
 		this.eixoY = eixoY;
 	}
 	
-	public Coordenada mudarCoordenada(MudancaCoordenada movimento){
-		int eixoXTemp = eixoX;
-		int eixoYTemp = eixoY;
-		
-		if(movimento!= null){
-			if(movimento.getEixo() == Eixo.X){
-				eixoXTemp+= movimento.getValor();
-				
-			}else if(movimento.getEixo() == Eixo.Y){
-				eixoYTemp+= movimento.getValor();
-			}
-		}
-		
-		return new Coordenada(eixoXTemp, eixoYTemp);
+	Coordenada moverAFrente(Direcao direcao){
+		return new Coordenada(eixoX.moverParaFrente(direcao), eixoY.moverParaFrente(direcao));
 	}
 
 	public int getEixoX() {
-		return eixoX;
+		return eixoX.getValor();
 	}
 	
 	public int getEixoY() {
-		return eixoY;
+		return eixoY.getValor();
 	}
 
 	@Override

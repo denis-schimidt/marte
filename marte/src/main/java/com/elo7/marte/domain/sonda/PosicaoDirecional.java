@@ -22,12 +22,11 @@ public class PosicaoDirecional implements Serializable{
 
 	PosicaoDirecional() {}
 	
-	public PosicaoDirecional(Coordenada coordenada, Direcao direcao) {
-		Preconditions.checkArgument(coordenada!= null, "A coordenada não pode ser nula.");
-		Preconditions.checkArgument(direcao!= null, "A direção não pode ser nula.");
+	private PosicaoDirecional(Builder builder) {
+		Preconditions.checkArgument(builder.direcao!= null, "A direção não pode ser nula.");
 		
-		this.coordenada = coordenada;
-		this.direcao = direcao;
+		this.coordenada = new Coordenada(new EixoX(builder.eixoX), new EixoY(builder.eixoY));
+		this.direcao = builder.direcao;
 	}
 	
 	public PosicaoDirecional atualizarPosicao(Comando comando){
@@ -45,6 +44,10 @@ public class PosicaoDirecional implements Serializable{
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(coordenada,direcao);
+	}
+	
+	public static Builder builder(){
+		return new Builder();
 	}
 
 	@Override
@@ -64,5 +67,40 @@ public class PosicaoDirecional implements Serializable{
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+	
+	public static class Builder{
+		private int eixoX;
+		private int eixoY;
+		private Direcao direcao;
+		
+		public Builder noEixoX(int x){
+			this.eixoX = x;
+			
+			return this;
+		}
+		
+		public Builder noEixoY(int y){
+			this.eixoY = y;
+			
+			return this;
+		}
+		
+		public Builder naCoordenada(Coordenada coordenada){
+			this.eixoX = coordenada.getEixoX();
+			this.eixoY = coordenada.getEixoY();
+			
+			return this;
+		}
+		
+		public Builder apontandoPara(Direcao direcao){
+			this.direcao = direcao;
+			
+			return this;
+		}
+		
+		public PosicaoDirecional build(){
+			return new PosicaoDirecional(this);
+		}
 	}
 }
