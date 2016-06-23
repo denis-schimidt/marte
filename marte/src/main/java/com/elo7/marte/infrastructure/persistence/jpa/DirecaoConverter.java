@@ -5,7 +5,7 @@ import javax.persistence.Converter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.elo7.marte.domain.sonda.Direcao;
+import com.elo7.marte.domain.model.sonda.Direcao;
 
 @Converter(autoApply=true)
 public class DirecaoConverter implements AttributeConverter<Direcao, String> {

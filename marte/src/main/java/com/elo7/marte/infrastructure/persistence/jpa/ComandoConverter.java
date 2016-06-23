@@ -5,7 +5,7 @@ import javax.persistence.Converter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.elo7.marte.domain.sonda.Comando;
+import com.elo7.marte.domain.model.sonda.Comando;
 
 @Converter(autoApply=true)
 public class ComandoConverter implements AttributeConverter<Comando, String> {

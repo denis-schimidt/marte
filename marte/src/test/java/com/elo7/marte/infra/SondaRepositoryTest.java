@@ -17,14 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elo7.marte.MarteApplication;
-import com.elo7.marte.domain.planalto.Planalto;
-import com.elo7.marte.domain.planalto.PossivelColisaoSondasNoPlanaltoException;
-import com.elo7.marte.domain.sonda.Comando;
-import com.elo7.marte.domain.sonda.CoordenadaForaDoPlanaltoException;
-import com.elo7.marte.domain.sonda.Direcao;
-import com.elo7.marte.domain.sonda.PosicaoDirecional;
-import com.elo7.marte.domain.sonda.Sonda;
-import com.elo7.marte.domain.sonda.SondaRepository;
+import com.elo7.marte.domain.model.planalto.Planalto;
+import com.elo7.marte.domain.model.planalto.PossivelColisaoSondasNoPlanaltoException;
+import com.elo7.marte.domain.model.sonda.Comando;
+import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
+import com.elo7.marte.domain.model.sonda.Direcao;
+import com.elo7.marte.domain.model.sonda.PosicaoDirecional;
+import com.elo7.marte.domain.model.sonda.Sonda;
+import com.elo7.marte.domain.model.sonda.SondaRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = MarteApplication.class)
@@ -45,7 +45,7 @@ public class SondaRepositoryTest {
 		Sonda sonda = new Sonda(PosicaoDirecional.builder().noEixoX(1).noEixoY(2).apontandoPara(Direcao.NORTH).build(), planalto);
 		
 		Set<PosicaoDirecional> posicoesOutraSonda = new HashSet<>();
-		posicoesOutraSonda.add(PosicaoDirecional.builder().noEixoX(1).noEixoY(8).apontandoPara(Direcao.NORTH).build());
+		posicoesOutraSonda.add(PosicaoDirecional.builder().noEixoX(1).noEixoY(4).apontandoPara(Direcao.NORTH).build());
 		
 		sonda.iniciarExploracao(comandos, posicoesOutraSonda);
 		
