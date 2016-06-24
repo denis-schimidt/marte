@@ -57,12 +57,11 @@ public class PlanaltoResource {
 	}
 	
 	@RequestMapping(path="/todos", method = RequestMethod.GET)
-	public ResponseEntity<List<PlanaltoDTO>> listarTodosPaginado(@RequestParam(defaultValue="0", value="pagina") int pagina, @RequestParam(defaultValue="50", value="tamanho") int tamanho) {
-		List<PlanaltoDTO> planaltosDTO = null;
+	public ResponseEntity<List<PlanaltoDTO>> listarTodosComPaginacao(@RequestParam(defaultValue="0", value="pagina") int pagina, @RequestParam(defaultValue="50", value="tamanho") int tamanho) {
 		
 		Page<Planalto> paginaComPlanaltos = repository.findAll(new PageRequest(pagina, tamanho));
 		
-		planaltosDTO = paginaComPlanaltos.getContent()
+		List<PlanaltoDTO> planaltosDTO = paginaComPlanaltos.getContent()
 			.stream()
 			.map(p->new PlanaltoDTO(p))
 			.collect(Collectors.toList());
