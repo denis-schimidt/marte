@@ -49,7 +49,7 @@ public class Sonda{
 		sondasPlanalto.add(sondaNoPlanalto);
 	}
 
-	public void iniciarExploracao(final List<Comando> comandos, final Set<PosicaoDirecional> posicoesOcupadasOutrasSondas) {
+	public void iniciarExploracao(final List<Comando> comandos, final Set<Coordenada> posicoesOcupadasOutrasSondas) {
 		
 		SondaNoPlanalto sondaNoPlanalto = obterSondaNoPlanaltoAtual();
 		int indice = 0;

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.elo7.marte.domain.model.sonda.Coordenada;
 import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 @Table(name="planalto")
 @Entity
@@ -34,17 +35,22 @@ public class Planalto{
 	@Column(nullable = false, name = "ponto_maximo_y")
 	private int pontoMaximoY;
 	
+	@Column(nullable=false, length=35)
+	private String nome;
+	
 	@OneToMany(cascade=CascadeType.PERSIST,mappedBy="planalto")
 	private Set<SondaNoPlanalto> sondasNoPlanalto;
 
 	Planalto() {}
 
-	public Planalto(int pontoMaximoX, int pontoMaximoY) {
+	public Planalto(int pontoMaximoX, int pontoMaximoY, String nome) {
 		Preconditions.checkArgument(pontoMaximoX >= 0, "O ponto máximo X do planalto não pode ser menor que zero.");
 		Preconditions.checkArgument(pontoMaximoY >= 0, "O ponto máximo Y do planalto não pode ser menor que zero.");
-
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(nome.trim()), "O nome do planalto não pode ser nulo ou vazio.");
+		
 		this.pontoMaximoX = pontoMaximoX;
 		this.pontoMaximoY = pontoMaximoY;
+		this.nome = nome;
 		
 		this.sondasNoPlanalto = new HashSet<>();
 	}
@@ -70,6 +76,10 @@ public class Planalto{
 
 	public int getPontoMaximoY() {
 		return pontoMaximoY;
+	}
+	
+	public String getNome() {
+		return nome;
 	}
 
 	public Set<SondaNoPlanalto> getSondasPlanalto() {

@@ -1,4 +1,4 @@
-package com.elo7.marte.infra;
+/*package com.elo7.marte.infra;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -59,3 +59,4 @@ public class SondaRepositoryTest {
 		repository.findAll().forEach(System.out::println);
 	}
 }
+*/

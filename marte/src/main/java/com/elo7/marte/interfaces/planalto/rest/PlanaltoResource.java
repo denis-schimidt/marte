@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,13 +39,13 @@ public class PlanaltoResource {
 	@Transactional
 	public PlanaltoDTO salvar(@Valid @NotNull @RequestBody PlanaltoDTO planaltoDTO) {
 		
-		Planalto planalto = repository.save(new Planalto(planaltoDTO.getLimiteMaximoX(), planaltoDTO.getLimiteMaximoY()));
+		Planalto planalto = repository.save(new Planalto(planaltoDTO.getLimiteMaximoX(), planaltoDTO.getLimiteMaximoY(), planaltoDTO.getNome()));
 		planaltoDTO.setId(planalto.getId());
 		
 		return planaltoDTO;
 	}
 	
-	@RequestMapping(path="{id}", method = RequestMethod.GET)
+	@RequestMapping(path="/id/{id}", method = RequestMethod.GET)
 	public ResponseEntity<PlanaltoDTO> pesquisarPorId(@PathVariable("id") Integer id) {
 		PlanaltoDTO planaltoDTO = null;
 		
@@ -56,10 +59,11 @@ public class PlanaltoResource {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(planaltoDTO);
 	}
 	
-	@RequestMapping(path="/todos", method = RequestMethod.GET)
-	public ResponseEntity<List<PlanaltoDTO>> listarTodosComPaginacao(@RequestParam(defaultValue="0", value="pagina") int pagina, @RequestParam(defaultValue="50", value="tamanho") int tamanho) {
+	@RequestMapping(path="/todos{ordenacao}", method = RequestMethod.GET)
+	public ResponseEntity<List<PlanaltoDTO>> listarTodosComPaginacaoEOrdenacao(@RequestParam(defaultValue="0") int pagina, @RequestParam(defaultValue="20") int tamanho,
+			@MatrixVariable(defaultValue="nome", pathVar="ordenacao") List<String> camposAOrdenar, @MatrixVariable(defaultValue="ASC", pathVar="ordenacao") String tipoOrdenacao) {
 		
-		Page<Planalto> paginaComPlanaltos = repository.findAll(new PageRequest(pagina, tamanho));
+		Page<Planalto> paginaComPlanaltos = repository.findAll(new PageRequest(pagina, tamanho, new Sort(Direction.fromString(tipoOrdenacao), camposAOrdenar)));
 		
 		List<PlanaltoDTO> planaltosDTO = paginaComPlanaltos.getContent()
 			.stream()

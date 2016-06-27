@@ -20,6 +20,7 @@ import javax.persistence.UniqueConstraint;
 import com.elo7.marte.domain.model.registro_bordo.RegistroDeBordo;
 import com.elo7.marte.domain.model.registro_bordo.StatusMovimentacaoSonda;
 import com.elo7.marte.domain.model.sonda.Comando;
+import com.elo7.marte.domain.model.sonda.Coordenada;
 import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
 import com.elo7.marte.domain.model.sonda.PosicaoDirecional;
 import com.elo7.marte.domain.model.sonda.Sonda;
@@ -74,12 +75,12 @@ public class SondaNoPlanalto implements Serializable{
 		registrosDeBordo.add(new RegistroDeBordo(this, comando, posicaoAtual, statusDaMovimentacao));
 	}
 	
-	public void validarPosicaoPlanalto(PosicaoDirecional posicaoDirecional, Set<PosicaoDirecional> posicoesOcupadasOutrasSondas) throws CoordenadaForaDoPlanaltoException, 
+	public void validarPosicaoPlanalto(PosicaoDirecional posicaoDirecional, Set<Coordenada> posicoesOcupadasOutrasSondas) throws CoordenadaForaDoPlanaltoException, 
 			PossivelColisaoSondasNoPlanaltoException {
 		
 		planalto.validarCoordenadaDentroPlanalto(posicaoDirecional.getCoordenada());
 		
-		if(posicoesOcupadasOutrasSondas!=null && posicoesOcupadasOutrasSondas.contains(posicaoDirecional)){
+		if(posicoesOcupadasOutrasSondas!=null && posicoesOcupadasOutrasSondas.contains(posicaoDirecional.getCoordenada())){
 			throw new PossivelColisaoSondasNoPlanaltoException("Interrupção de comandos devido a possível colisão de sondas na %s.", posicaoDirecional);
 		}
 	}

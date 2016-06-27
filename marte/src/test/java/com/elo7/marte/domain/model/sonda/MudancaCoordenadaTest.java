@@ -1,4 +1,4 @@
-package com.elo7.marte.domain.model.sonda;
+/*package com.elo7.marte.domain.model.sonda;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -43,3 +43,4 @@ public class MudancaCoordenadaTest {
 		assertThat(mudancaCoordenada.getValor(), equalTo(-1));
 	}
 }
+*/
