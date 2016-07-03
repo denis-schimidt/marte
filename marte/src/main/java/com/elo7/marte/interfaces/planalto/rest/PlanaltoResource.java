@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,7 +28,6 @@ import com.elo7.marte.domain.model.planalto.PlanaltoRepository;
 
 @RestController
 @RequestMapping(value="/planaltos", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-@Scope(scopeName="prototype")
 public class PlanaltoResource {
 	
 	@Autowired
