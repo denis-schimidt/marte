@@ -1,7 +1,6 @@
 package com.elo7.marte.domain.model.planalto;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,14 +11,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.elo7.marte.domain.model.sonda.Coordenada;
 import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
+import com.elo7.marte.interfaces.json.View;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 
 @Table(name="planalto")
 @Entity
@@ -27,33 +31,26 @@ public class Planalto{
 
 	@Id
 	@GeneratedValue
+	@JsonView(View.DTO.class)
 	private Integer id;
 
+	@JsonView(View.DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_x")
+	@Min(value=0, message="{planalto.pontoMaximoX.Min}") 
 	@Column(nullable = false, name = "ponto_maximo_x")
 	private int pontoMaximoX;
-
+	
+	@JsonView(View.DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_y")
+	@Min(value=0, message="{planalto.pontoMaximoY.Min}")
 	@Column(nullable = false, name = "ponto_maximo_y")
 	private int pontoMaximoY;
 	
+	@JsonView(View.DTO.class) 
+	@Size(min=5, max=35, message="{planalto.nome.Size}") @NotBlank(message="{planalto.nome.NotBlank}")
 	@Column(nullable=false, length=35)
 	private String nome;
 	
 	@OneToMany(cascade=CascadeType.PERSIST,mappedBy="planalto")
 	private Set<SondaNoPlanalto> sondasNoPlanalto;
-
-	Planalto() {}
-
-	public Planalto(int pontoMaximoX, int pontoMaximoY, String nome) {
-		Preconditions.checkArgument(pontoMaximoX >= 0, "O ponto máximo X do planalto não pode ser menor que zero.");
-		Preconditions.checkArgument(pontoMaximoY >= 0, "O ponto máximo Y do planalto não pode ser menor que zero.");
-		Preconditions.checkArgument(!Strings.isNullOrEmpty(nome.trim()), "O nome do planalto não pode ser nulo ou vazio.");
-		
-		this.pontoMaximoX = pontoMaximoX;
-		this.pontoMaximoY = pontoMaximoY;
-		this.nome = nome;
-		
-		this.sondasNoPlanalto = new HashSet<>();
-	}
 
 	public void validarCoordenadaDentroPlanalto(Coordenada coordenada) throws CoordenadaForaDoPlanaltoException {
 		Preconditions.checkArgument(coordenada != null, "A coordenada não pode ser nula para o planalto.");
