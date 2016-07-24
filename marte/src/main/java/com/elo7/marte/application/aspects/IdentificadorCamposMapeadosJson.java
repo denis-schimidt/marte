@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 
 public class IdentificadorCamposMapeadosJson {
 
-	public static boolean isCamposMapeadosOrdenacao(JsonSortFieldsConverter jsonSortFieldsConverter){
+	public static boolean isCamposPrecisamSerConvertidosOrdenacao(JsonSortFieldsConverter jsonSortFieldsConverter){
 		return Lists.newArrayList(jsonSortFieldsConverter.value().getDeclaredFields())
 				.stream()
 				.filter(f-> f.getAnnotationsByType(JsonProperty.class).length > 0)

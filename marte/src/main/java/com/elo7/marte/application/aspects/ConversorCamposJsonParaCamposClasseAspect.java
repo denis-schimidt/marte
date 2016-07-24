@@ -25,7 +25,7 @@ public class ConversorCamposJsonParaCamposClasseAspect {
 	public Object around(ProceedingJoinPoint point, JsonSortFieldsConverter jsonSortFieldsConverter) throws Throwable {
 		PageRequest pageRequest = encontrarPageRequest(point);
 		
-		if(IdentificadorCamposMapeadosJson.isCamposMapeadosOrdenacao(jsonSortFieldsConverter)){
+		if(IdentificadorCamposMapeadosJson.isCamposPrecisamSerConvertidosOrdenacao(jsonSortFieldsConverter)){
 			final Map<String, String> mapaNomeCampoClassePorJsonProperty = criarMapaComNameFieldPorJsonField(jsonSortFieldsConverter);
 			PageRequest pageRequestConsiderandoNomeCamposClasse = pageRequestFactory.from(pageRequest, mapaNomeCampoClassePorJsonProperty);
 			

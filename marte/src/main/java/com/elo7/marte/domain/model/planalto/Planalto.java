@@ -1,6 +1,7 @@
 package com.elo7.marte.domain.model.planalto;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.elo7.marte.domain.model.sonda.Coordenada;
 import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
-import com.elo7.marte.interfaces.json.View;
+import com.elo7.marte.interfaces.json.view.DTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Preconditions;
@@ -31,20 +32,20 @@ public class Planalto{
 
 	@Id
 	@GeneratedValue
-	@JsonView(View.DTO.class)
+	@JsonView(DTO.class)
 	private Integer id;
 
-	@JsonView(View.DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_x")
+	@JsonView(DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_x")
 	@Min(value=0, message="{planalto.pontoMaximoX.Min}") 
 	@Column(nullable = false, name = "ponto_maximo_x")
 	private int pontoMaximoX;
 	
-	@JsonView(View.DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_y")
+	@JsonView(DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_y")
 	@Min(value=0, message="{planalto.pontoMaximoY.Min}")
 	@Column(nullable = false, name = "ponto_maximo_y")
 	private int pontoMaximoY;
 	
-	@JsonView(View.DTO.class) 
+	@JsonView(DTO.class) 
 	@Size(min=5, max=35, message="{planalto.nome.Size}") @NotBlank(message="{planalto.nome.NotBlank}")
 	@Column(nullable=false, length=35)
 	private String nome;
@@ -61,6 +62,14 @@ public class Planalto{
 		if (!isCoordenadaValida) {
 			throw new CoordenadaForaDoPlanaltoException("A %s está fora dos limites do %s", coordenada, this);
 		}
+	}
+	
+	public void adicionarSondas(Set<SondaNoPlanalto> novasSondaNoPlanaltos){
+		if(this.sondasNoPlanalto == null){
+			this.sondasNoPlanalto = new HashSet<>();
+		}
+		
+		sondasNoPlanalto.addAll(novasSondaNoPlanaltos);
 	}
 
 	public Integer getId() {

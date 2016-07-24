@@ -18,11 +18,7 @@ public class PageRequestFactory {
 		
 		List<Order> listaCamposAOrdenar = listarOrders(pageRequestInicial)
 			.stream()
-			.map(order-> {
-				String nomeCampoEncontradoPeloJson = mapaNomeCampoNaClassePorJsonProperty.get(order.getProperty());
-				
-				return obterOrderAdequadoCampo(pageRequestInicial, order, nomeCampoEncontradoPeloJson);
-			})
+			.map(order-> obterOrderAdequadoCampo(pageRequestInicial, order, mapaNomeCampoNaClassePorJsonProperty.get(order.getProperty())))
 			.collect(Collectors.toList());
 			
 		return criarNovoPageRequest(pageRequestInicial, criarNovoSort(listaCamposAOrdenar));
