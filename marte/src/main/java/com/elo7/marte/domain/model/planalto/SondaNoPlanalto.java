@@ -24,6 +24,7 @@ import com.elo7.marte.domain.model.sonda.Coordenada;
 import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
 import com.elo7.marte.domain.model.sonda.PosicaoDirecional;
 import com.elo7.marte.domain.model.sonda.Sonda;
+import com.elo7.marte.interfaces.planalto.rest.PlanaltoOnView;
 import com.google.common.base.MoreObjects;
 
 @IdClass(IdPosicaoPlanalto.class)
@@ -93,7 +94,7 @@ public class SondaNoPlanalto implements Serializable{
 		return sonda;
 	}
 
-	public Planalto getPlanalto() {
+	public PlanaltoOnView getPlanalto() {
 		return planalto;
 	}
 

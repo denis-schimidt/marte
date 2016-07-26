@@ -1,4 +1,4 @@
-package com.elo7.marte.application.aspects;
+package com.elo7.marte.infrastructure.aspects;
 
 import java.util.List;
 import java.util.Map;

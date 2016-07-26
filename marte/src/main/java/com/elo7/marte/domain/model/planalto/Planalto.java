@@ -21,32 +21,27 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.elo7.marte.domain.model.sonda.Coordenada;
 import com.elo7.marte.domain.model.sonda.CoordenadaForaDoPlanaltoException;
-import com.elo7.marte.interfaces.json.view.DTO;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.elo7.marte.interfaces.planalto.rest.PlanaltoOnView;
 import com.google.common.base.Preconditions;
 
 @Table(name="planalto")
 @Entity
-public class Planalto{
+public class Planalto implements PlanaltoOnView{
 
 	@Id
 	@GeneratedValue
-	@JsonView(DTO.class)
 	private Integer id;
 
-	@JsonView(DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_x")
 	@Min(value=0, message="{planalto.pontoMaximoX.Min}") 
 	@Column(nullable = false, name = "ponto_maximo_x")
 	private int pontoMaximoX;
 	
-	@JsonView(DTO.class)  @JsonProperty(defaultValue="0", value="ponto_maximo_y")
 	@Min(value=0, message="{planalto.pontoMaximoY.Min}")
 	@Column(nullable = false, name = "ponto_maximo_y")
 	private int pontoMaximoY;
-	
-	@JsonView(DTO.class) 
-	@Size(min=5, max=35, message="{planalto.nome.Size}") @NotBlank(message="{planalto.nome.NotBlank}")
+	 
+	@Size(min=5, max=35, message="{planalto.nome.Size}") 
+	@NotBlank(message="{planalto.nome.NotBlank}")
 	@Column(nullable=false, length=35)
 	private String nome;
 	
@@ -72,18 +67,22 @@ public class Planalto{
 		sondasNoPlanalto.addAll(novasSondaNoPlanaltos);
 	}
 
+	@Override
 	public Integer getId() {
 		return id;
 	}
 	
+	@Override
 	public int getPontoMaximoX() {
 		return pontoMaximoX;
 	}
 
+	@Override
 	public int getPontoMaximoY() {
 		return pontoMaximoY;
 	}
-	
+
+	@Override
 	public String getNome() {
 		return nome;
 	}

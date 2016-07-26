@@ -22,17 +22,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.elo7.marte.application.aspects.JsonSortFieldsConverter;
 import com.elo7.marte.domain.model.planalto.Planalto;
 import com.elo7.marte.domain.model.planalto.PlanaltoRepository;
+import com.elo7.marte.infrastructure.aspects.JsonSortFieldsConverter;
 import com.elo7.marte.interfaces.json.view.DTO;
 import com.fasterxml.jackson.annotation.JsonView;
 
-import io.swagger.annotations.ApiModel;
-
 @RestController
-@RequestMapping(value="/sonda-marte/api/v1/planaltos")
-@ApiModel(value="planaltos")
+@RequestMapping(value="/sonda-marte/api/v1/planaltos", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class PlanaltoResource {
 	
 	@Autowired
@@ -41,7 +38,7 @@ public class PlanaltoResource {
 	@RequestMapping(consumes=MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<Void> incluir(@Valid @NotNull @RequestBody Planalto planalto) {
-		Planalto planaltoIncluido = repository.save(planalto);
+		PlanaltoOnView planaltoIncluido = repository.save(planalto);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(planaltoIncluido.getId().toString()).build().toUri();
 		
@@ -62,10 +59,10 @@ public class PlanaltoResource {
 		return ResponseEntity.notFound().build();
 	}
 	
-	@RequestMapping(consumes=MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
+	@RequestMapping(path="/{id}", method = RequestMethod.DELETE)
 	@Transactional
-	public ResponseEntity<Void> deletar(@NotNull(message="{planalto.id.NotNull}") Integer id) {
-		Planalto planaltoAtual = repository.findOne(id);
+	public ResponseEntity<Void> deletar(@NotNull(message="{planalto.id.NotNull}") @PathVariable("id") Integer id) {
+		PlanaltoOnView planaltoAtual = repository.findOne(id);
 		
 		if(planaltoAtual!= null){
 			repository.delete(id);
@@ -78,7 +75,7 @@ public class PlanaltoResource {
 	
 	@RequestMapping(path="/{id}", method = RequestMethod.GET)
 	@JsonView(DTO.class)
-	public ResponseEntity<Planalto> pesquisarPorId(@PathVariable("id") Integer id) {
+	public ResponseEntity<PlanaltoOnView> pesquisarPorId(@PathVariable("id") Integer id) {
 		
 		Planalto planalto = repository.findOne(id);
 		
@@ -86,17 +83,17 @@ public class PlanaltoResource {
 			return ResponseEntity.ok(planalto);
 		}
 
-		return new ResponseEntity<Planalto>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@JsonView(DTO.class)
-	@JsonSortFieldsConverter(Planalto.class)
-	public ResponseEntity<List<Planalto>> listarTodos(@PageableDefault(page=0, size=20, sort="nome") Pageable pagina){
+	@JsonSortFieldsConverter(PlanaltoOnView.class)
+	public ResponseEntity<List<PlanaltoOnView>> listarTodos(@PageableDefault(page=0, size=20, sort="nome") Pageable pagina){
 		Page<Planalto> page = repository.findAll(pagina);
 		
 		if(page.getNumberOfElements() > 0){
-			return ResponseEntity.ok(page.getContent());
+			return ResponseEntity.ok(page.map(p->(PlanaltoOnView)p).getContent());
 		}
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());

@@ -1,4 +1,4 @@
-package com.elo7.marte.application.aspects;
+package com.elo7.marte.infrastructure.aspects;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -36,10 +36,10 @@ public class ConversorCamposJsonParaCamposClasseAspect {
 	}
 
 	private Map<String, String> criarMapaComNameFieldPorJsonField(JsonSortFieldsConverter jsonSortFieldsConverter) {
-		final Map<String, String> mapaComNameFieldPorJsonField = Lists.newArrayList(jsonSortFieldsConverter.value().getDeclaredFields())
+		final Map<String, String> mapaComNameFieldPorJsonField = Lists.newArrayList(jsonSortFieldsConverter.value().getDeclaredMethods())
 			.stream()
-			.filter(f-> f.getAnnotationsByType(JsonProperty.class).length > 0)
-			.map(f-> new RelacionamentoNomeCampoJsonNomeCampoClasse(f.getAnnotationsByType(JsonProperty.class)[0], f.getName())) 
+			.filter(m-> m.getAnnotationsByType(JsonProperty.class).length > 0)
+			.map(m-> new RelacionamentoNomeCampoJsonNomeCampoClasse(m.getAnnotationsByType(JsonProperty.class)[0], m.getName())) 
 			.collect(toMap(RelacionamentoNomeCampoJsonNomeCampoClasse::getNomeCampoJson, RelacionamentoNomeCampoJsonNomeCampoClasse::getNomeCampoClasse));
 		
 		return mapaComNameFieldPorJsonField;
@@ -60,9 +60,13 @@ public class ConversorCamposJsonParaCamposClasseAspect {
 		private JsonProperty jsonProperty;
 		private String nomeCampoClasse;
 
-		public RelacionamentoNomeCampoJsonNomeCampoClasse(JsonProperty jsonProperty, String nomeCampoClasse) {
+		public RelacionamentoNomeCampoJsonNomeCampoClasse(JsonProperty jsonProperty, String nomeMetodoClasse) {
 			this.jsonProperty = jsonProperty;
-			this.nomeCampoClasse = nomeCampoClasse;
+			
+			StringBuilder nomeCampoBuilder = new StringBuilder(nomeMetodoClasse.substring(3));
+			nomeCampoBuilder.setCharAt(0, Character.toUpperCase(nomeCampoBuilder.charAt(0)));
+			
+			this.nomeCampoClasse = nomeCampoBuilder.toString();
 		}
 
 		public String getNomeCampoJson() {
